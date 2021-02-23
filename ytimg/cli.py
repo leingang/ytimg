@@ -2,17 +2,23 @@
 
 """Console script for ytimg."""
 import sys
+import requests
 import click
 
+import ytimg.ytimg as ytimg
 
+# TODO: Add destination option
 @click.command()
-def main(args=None):
+@click.argument('url')
+def main(url):
     """Console script for ytimg."""
-    click.echo("Replace this message by putting your code into "
-               "ytimg.cli.main")
-    click.echo("See click documentation at http://click.pocoo.org/")
-    return 0
-
+    ytid = ytimg.youtube_id(url)
+    img_url = "http://img.youtube.com/vi/{}/0.jpg".format(ytid)
+    filename = "{}.jpg".format(ytid)
+    response = requests.get(img_url)
+    file = open(filename, "wb")
+    file.write(response.content)
+    file.close()
 
 if __name__ == "__main__":
     sys.exit(main())  # pragma: no cover
